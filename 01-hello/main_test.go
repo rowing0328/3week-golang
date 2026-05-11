@@ -11,7 +11,7 @@ func TestMainPrintsHelloAndIntroduction(t *testing.T) {
 	// main 함수가 표준 출력(stdout)에 쓴 내용을 테스트에서 읽기 위해 파이프를 만듭니다.
 	reader, writer, err := os.Pipe()
 	if err != nil {
-		t.Fatalf("create stdout pipe: %v", err)
+		t.Fatalf("stdout 캡처용 파이프 생성 실패: %v", err)
 	}
 
 	// 기존 stdout을 보관한 뒤, 테스트 중에는 stdout이 파이프 writer를 바라보게 바꿉니다.
@@ -24,13 +24,13 @@ func TestMainPrintsHelloAndIntroduction(t *testing.T) {
 	// stdout을 원래 상태로 되돌리고 writer를 닫아 reader가 출력 내용을 끝까지 읽을 수 있게 합니다.
 	os.Stdout = originalStdout
 	if err := writer.Close(); err != nil {
-		t.Fatalf("close stdout writer: %v", err)
+		t.Fatalf("stdout writer 닫기 실패: %v", err)
 	}
 
 	// 파이프 reader에 쌓인 출력 내용을 문자열 비교가 쉬운 버퍼로 복사합니다.
 	var output bytes.Buffer
 	if _, err := io.Copy(&output, reader); err != nil {
-		t.Fatalf("read stdout: %v", err)
+		t.Fatalf("stdout 읽기 실패: %v", err)
 	}
 
 	// fmt.Println은 각 줄 끝에 줄바꿈을 붙이므로 기대값에도 \n을 포함합니다.
@@ -40,6 +40,6 @@ func TestMainPrintsHelloAndIntroduction(t *testing.T) {
 
 	// 출력 순서와 내용이 하나라도 달라지면 테스트가 실패합니다.
 	if output.String() != expected {
-		t.Fatalf("unexpected output:\nwant:\n%q\ngot:\n%q", expected, output.String())
+		t.Fatalf("예상과 다른 출력입니다:\n기대값:\n%q\n실제값:\n%q", expected, output.String())
 	}
 }
