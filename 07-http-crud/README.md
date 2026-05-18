@@ -22,12 +22,18 @@ go run ./07-http-crud
 curl http://localhost:8080/users
 ```
 
+### 나이 필터 목록 조회
+
+```bash
+curl http://localhost:8080/users?minAge=20
+```
+
 ### 생성
 
 ```bash
 curl -X POST http://localhost:8080/users \
   -H 'Content-Type: application/json' \
-  -d '{"name":"Alice","age":25}'
+  -d '{"name":"Alice","age":25,"email":"alice@example.com"}'
 ```
 
 ### 단건 조회
@@ -41,7 +47,7 @@ curl http://localhost:8080/users/1
 ```bash
 curl -X PUT http://localhost:8080/users/1 \
   -H 'Content-Type: application/json' \
-  -d '{"name":"Alice Kim","age":26}'
+  -d '{"name":"Alice Kim","age":26,"email":"alice.kim@example.com"}'
 ```
 
 ### 삭제
@@ -60,5 +66,5 @@ curl -X DELETE http://localhost:8080/users/1
 ## 실습
 
 - `GET /users?minAge=20`처럼 특정 나이 이상만 조회하는 기능을 추가해 보세요.
-- `Email` 필드를 추가하고 생성, 수정, 조회 응답에 포함해 보세요.
-- 전역 변수 대신 `type Store struct`를 만들어 저장소 로직을 메서드로 분리해 보세요.
+- `Email` 필드는 생성, 수정, 조회 응답에 포함됩니다.
+- `type Store struct`가 메모리 저장소 로직을 메서드로 관리합니다.
