@@ -1,40 +1,55 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+	"os"
+)
 
-func main() {
+// run은 조건문과 반복문 예제의 결과를 w에 출력합니다.
+func run(w io.Writer) {
 	score := 85
 
 	if score >= 90 {
-		fmt.Println("grade: A")
+		fmt.Fprintln(w, "grade: A")
 	} else if score >= 80 {
-		fmt.Println("grade: B")
+		fmt.Fprintln(w, "grade: B")
 	} else if score >= 70 {
-		fmt.Println("grade: C")
+		fmt.Fprintln(w, "grade: C")
 	} else {
-		fmt.Println("grade: F")
+		fmt.Fprintln(w, "grade: F")
 	}
 
 	day := "sat"
 	switch day {
 	case "sat", "sun":
-		fmt.Println("weekend")
+		fmt.Fprintln(w, "weekend")
 	default:
-		fmt.Println("weekday")
+		fmt.Fprintln(w, "weekday")
 	}
 
 	for i := 1; i <= 5; i++ {
-		fmt.Printf("%d번째 반복\n", i)
+		fmt.Fprintf(w, "%d번째 반복\n", i)
 	}
 
 	n := 0
 	for n < 3 {
-		fmt.Println("n =", n)
+		fmt.Fprintln(w, "n =", n)
 		n++
 	}
 
 	fruits := []string{"apple", "banana", "cherry"}
 	for index, value := range fruits {
-		fmt.Printf("[%d] %s\n", index, value)
+		fmt.Fprintf(w, "[%d] %s\n", index, value)
 	}
+
+	for number := 1; number <= 100; number++ {
+		if number%2 == 0 {
+			fmt.Fprintln(w, number)
+		}
+	}
+}
+
+func main() {
+	run(os.Stdout)
 }
