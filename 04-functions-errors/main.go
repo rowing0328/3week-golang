@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
+	"os"
 )
 
 func greet(name string) string {
@@ -16,21 +18,32 @@ func divide(a, b float64) (float64, error) {
 	return a / b, nil
 }
 
-func main() {
-	fmt.Println(greet("Alice"))
+func add(a, b int) int {
+	return a + b
+}
+
+// run은 함수 호출, 다중 반환값, 에러 처리 예제의 결과를 w에 출력합니다.
+func run(w io.Writer) {
+	fmt.Fprintln(w, greet("Alice"))
 
 	result, err := divide(10, 3)
 	if err != nil {
-		fmt.Println("error:", err)
+		fmt.Fprintln(w, "error:", err)
 	} else {
-		fmt.Printf("result: %.2f\n", result)
+		fmt.Fprintf(w, "result: %.2f\n", result)
 	}
+
+	fmt.Fprintln(w, "sum:", add(2, 3))
 
 	result, err = divide(5, 0)
 	if err != nil {
-		fmt.Println("error:", err)
+		fmt.Fprintln(w, "error:", err)
 		return
 	}
 
-	fmt.Println("result:", result)
+	fmt.Fprintln(w, "result:", result)
+}
+
+func main() {
+	run(os.Stdout)
 }
